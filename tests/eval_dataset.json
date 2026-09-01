@@ -1,0 +1,10 @@
+[
+  {
+    "question": "What is paracetamol used for?",
+    "expected_keywords": "fever|pain"
+  },
+  {
+    "question": "What is the generic name for Crocin?",
+    "expected_keywords": "paracetamol"
+  }
+]

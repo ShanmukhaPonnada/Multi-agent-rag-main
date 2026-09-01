@@ -1,0 +1,60 @@
+multi-agent-rag/
+│
+├── app/                            # Main application package
+│   ├── main.py                     # FastAPI entrypoint — /ask, /history, /health
+│   │
+│   ├── agents/                     # Individual agents in the pipeline
+│   │   ├── router_agent.py         # Decides: internal_docs / web_search / both
+│   │   ├── retriever_agent.py      # Pulls relevant chunks from the vector store
+│   │   ├── web_search_agent.py     # Fallback live web search (DuckDuckGo)
+│   │   ├── synthesizer_agent.py    # Drafts an answer from retrieved context
+│   │   └── critic_agent.py         # Checks the answer is grounded; flags retries
+│   │
+│   ├── orchestrator/
+│   │   └── pipeline.py             # Wires all agents together end-to-end
+│   │
+│   ├── retrieval/                  # RAG plumbing
+│   │   ├── loaders.py              # Load + chunk CSV / PDF / txt into Documents
+│   │   ├── embeddings.py           # HuggingFace embedding model wrapper
+│   │   └── vectorstore.py          # Chroma vector store (build + retrieve)
+│   │
+│   ├── models/
+│   │   ├── llm_client.py           # Thin wrapper around the Gemini API
+│   │   └── schemas.py              # Pydantic request/response models
+│   │
+│   ├── db/                         # Postgres persistence layer (SQLAlchemy)
+│   │   ├── database.py             # Engine, session, Base
+│   │   ├── models.py               # Document, QueryLog, QuerySource, EvalResult
+│   │   └── crud.py                 # Query/insert helpers used by the pipeline
+│   │
+│   ├── utils/
+│   │   ├── prompts.py              # ROUTER_PROMPT, SYNTHESIZER_PROMPT, CRITIC_PROMPT
+│   │   └── logger.py               # Shared logging setup
+│   │
+│   └── config.py                   # Reads .env — API keys, DB URL, chunk sizes, etc.
+│
+├── scripts/                        # One-off operational scripts
+│   ├── init_db.py                  # Creates all Postgres tables
+│   ├── ingest_documents.py         # Loads data/raw/*, builds the vector store
+│   └── evaluate_rag.py             # Runs tests/eval_dataset.json through the pipeline
+│
+├── tests/
+│   ├── test_router_agent.py        # Unit test for the router
+│   ├── test_pipeline.py            # End-to-end pipeline test
+│   └── eval_dataset.json           # Labeled Q&A pairs for evaluate_rag.py
+│
+├── data/
+│   ├── raw/
+│   │   └── indian_medicines_sample.csv   # 2,000 real medicine records (source data)
+│   └── processed/                  # (empty — reserved for cleaned/intermediate data)
+│
+├── notebooks/                      # (empty — for exploratory analysis if needed)
+│
+├── docs/
+│   └── folder_structure.txt        # This file
+│
+├── docker-compose.yml              # Spins up the Postgres container
+├── requirements.txt                # Pinned Python dependencies
+├── .env.example                    # Template for required environment variables
+├── .gitignore
+└── README.md                       # Setup + usage instructions
