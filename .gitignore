@@ -1,0 +1,8 @@
+.env
+__pycache__/
+*.pyc
+venv/
+.ipynb_checkpoints/
+data/chroma_db/
+*.db
+.pytest_cache/
